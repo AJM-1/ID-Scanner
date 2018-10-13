@@ -146,7 +146,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         String eyes = StringUtils.substringBetween(id, "DAY", "\n");
 
         String address = StringUtils.substringBetween(id, "DAG", "\n") + "\n" + StringUtils.substringBetween(id, "DAI", "\n") + ", "
-                + StringUtils.substringBetween(id, "DAJ", "\n") + " " + StringUtils.substringBetween(id, "DAK", "\n") + "\n" + StringUtils.substringBetween(id, "DCG", "\n");
+                + StringUtils.substringBetween(id, "DAJ", "\n") + " " + StringUtils.substringBetween(id, "DAK", "\n").subSequence(0,5) + "\n"; //+ StringUtils.substringBetween(id, "DCG", "\n");
 
 
         String parsed = "Name: " + fName + " " + mName + " " +  lName + "\n" + "Date of birth: " + dob + "\n" + "Eye Color: " + eyes + "\n" + address;

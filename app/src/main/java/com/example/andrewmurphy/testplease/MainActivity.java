@@ -27,6 +27,11 @@ import android.widget.TextView;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Main activity demonstrating how to pass extra parameters to an activity that
  * reads barcodes.
@@ -130,9 +135,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     String parseString(String id){
-        
 
-        return (id);
+        String fName = StringUtils.substringBetween(id,"DAC", "\n");
+        String mName = StringUtils.substringBetween(id, "DAD", "\n");
+        String lName = StringUtils.substringBetween(id,"DCS", "\n");
+
+        String dob = StringUtils.substringBetween(id, "DBB", "\n");
+        dob = dob.substring(0,2) + "/" + dob.substring(2,4) + "/" + dob.substring(4);
+
+        String eyes = StringUtils.substringBetween(id, "DAY", "\n");
+
+        String address = StringUtils.substringBetween(id, "DAG", "\n") + "\n" + StringUtils.substringBetween(id, "DAI", "\n") + ", "
+                + StringUtils.substringBetween(id, "DAJ", "DAK") + StringUtils.substringBetween(id, "DAK", "DCF") + StringUtils.substringBetween(id, "DCG", "DAW");
+
+
+        String parsed = "Name: " + fName + " " + mName + " " +  lName + "\n" + "Date of birth: " + dob + "\n" + "Eye Color: " + eyes + "\n" + address;
+
+
+        System.out.println(fName);
+
+        return (parsed);
     }
 
 }

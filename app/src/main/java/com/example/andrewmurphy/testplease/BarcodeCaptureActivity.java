@@ -50,6 +50,8 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import java.io.IOException;
 
 /**
@@ -87,8 +89,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         super.onCreate(icicle);
         setContentView(R.layout.barcode_capture);
 
-        mPreview = (CameraSourcePreview) findViewById(R.id.preview);
-        mGraphicOverlay = (GraphicOverlay<BarcodeGraphic>) findViewById(R.id.graphicOverlay);
+        mPreview = findViewById(R.id.preview);
+        mGraphicOverlay = findViewById(R.id.graphicOverlay);
 
         // read parameters from the intent used to launch the activity.
         boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, false);
@@ -246,6 +248,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         if (mPreview != null) {
             mPreview.release();
         }
+        //if (gestureDetector!=null){gestureDetector.setContextClickListener();}
     }
 
     /**

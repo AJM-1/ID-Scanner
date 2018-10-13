@@ -47,18 +47,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        statusMessage = (TextView)findViewById(R.id.status_message);
-        barcodeValue = (TextView)findViewById(R.id.barcode_value);
+        statusMessage = findViewById(R.id.status_message);
+        barcodeValue = findViewById(R.id.barcode_value);
 
-        autoFocus = (CompoundButton) findViewById(R.id.auto_focus);
-        useFlash = (CompoundButton) findViewById(R.id.use_flash);
+        autoFocus = findViewById(R.id.auto_focus);
+        useFlash = findViewById(R.id.use_flash);
 
         findViewById(R.id.read_barcode).setOnClickListener(this);
 
-        autoFocus.setVisibility(View.INVISIBLE);
+        //autoFocus.setVisibility(View.INVISIBLE);
 
         //Open to Camera
-        openReader();
+        //openReader();
     }
 
     /**
@@ -70,7 +70,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         if (v.getId() == R.id.read_barcode) {
             //open up dat reader
-            openReader();
+            //openReader();
+            Intent intent = new Intent(this, BarcodeCaptureActivity.class);
+            intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
+            intent.putExtra(BarcodeCaptureActivity.UseFlash, useFlash.isChecked());
+
+            startActivityForResult(intent, RC_BARCODE_CAPTURE);
         }
 
     }

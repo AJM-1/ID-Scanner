@@ -55,10 +55,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         findViewById(R.id.read_barcode).setOnClickListener(this);
 
-        //autoFocus.setVisibility(View.INVISIBLE);
+        autoFocus.setVisibility(View.INVISIBLE);
 
         //Open to Camera
-        //openReader();
+        openReader();
     }
 
     /**
@@ -70,12 +70,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         if (v.getId() == R.id.read_barcode) {
             //open up dat reader
-            //openReader();
-            Intent intent = new Intent(this, BarcodeCaptureActivity.class);
-            intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
-            intent.putExtra(BarcodeCaptureActivity.UseFlash, useFlash.isChecked());
-
-            startActivityForResult(intent, RC_BARCODE_CAPTURE);
+            openReader();
         }
 
     }

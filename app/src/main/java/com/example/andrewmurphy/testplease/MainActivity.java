@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.regex.Matcher;
@@ -135,6 +136,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     String parseString(String id){
+        if(id.charAt(0)!='@')
+            return "Wrong or Invalid Barcode";
 
         String fName = StringUtils.substringBetween(id,"DAC", "\n");
         String mName = StringUtils.substringBetween(id, "DAD", "\n");
@@ -151,6 +154,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         String parsed = "Name: " + fName + " " + mName + " " +  lName + "\n" + "Date of birth: " + dob + "\n" + "Eye Color: " + eyes + "\n" + address;
 
+        if(fName == null || lName == null)
+            return "Wrong or Invalid Barcode";
 
         System.out.println(fName);
 

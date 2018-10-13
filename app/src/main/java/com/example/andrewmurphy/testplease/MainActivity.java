@@ -135,8 +135,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     String parseString(String id){
-        if(id.charAt(0)!='@')
-            return("Wrong Barcode, or invalid ID.");
+
         String fName = StringUtils.substringBetween(id,"DAC", "\n");
         String mName = StringUtils.substringBetween(id, "DAD", "\n");
         String lName = StringUtils.substringBetween(id,"DCS", "\n");
@@ -147,7 +146,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         String eyes = StringUtils.substringBetween(id, "DAY", "\n");
 
         String address = StringUtils.substringBetween(id, "DAG", "\n") + "\n" + StringUtils.substringBetween(id, "DAI", "\n") + ", "
-                + StringUtils.substringBetween(id, "DAJ", "DAK") + StringUtils.substringBetween(id, "DAK", "\n") + StringUtils.substringBetween(id, "DCG", "DAW");
+                + StringUtils.substringBetween(id, "DAJ", "\n") + " " + StringUtils.substringBetween(id, "DAK", "\n") + "\n" + StringUtils.substringBetween(id, "DCG", "\n");
 
 
         String parsed = "Name: " + fName + " " + mName + " " +  lName + "\n" + "Date of birth: " + dob + "\n" + "Eye Color: " + eyes + "\n" + address;

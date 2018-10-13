@@ -56,4 +56,14 @@
         android:checked="false"
         android:text="@string/use_flash" />
 
+    <Button
+        android:id="@+id/stats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/use_flash"
+        android:layout_alignBottom="@+id/use_flash"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="Stats" />
+
 </RelativeLayout>

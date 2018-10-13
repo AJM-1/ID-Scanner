@@ -30,8 +30,12 @@ import com.google.android.gms.vision.barcode.Barcode;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Main activity demonstrating how to pass extra parameters to an activity that
@@ -44,6 +48,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private CompoundButton useFlash;
     private TextView statusMessage;
     private TextView barcodeValue;
+    int scanCount = 0, totalAge = 0;
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
@@ -60,6 +65,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         useFlash = findViewById(R.id.use_flash);
 
         findViewById(R.id.read_barcode).setOnClickListener(this);
+        findViewById(R.id.stats).setOnClickListener(this);
 
         autoFocus.setVisibility(View.INVISIBLE);
 
@@ -77,6 +83,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (v.getId() == R.id.read_barcode) {
             //open up dat reader
             openReader();
+        }
+        if (v.getId() == R.id.stats) {
+            barcodeValue.setText("Statistics \nAverage Age: "+ String.format("%.2f", ((double)totalAge/(double)scanCount)) + "\nTotal Scans: \t"+ scanCount);
         }
 
     }
@@ -146,18 +155,46 @@ public class MainActivity extends Activity implements View.OnClickListener {
         String dob = StringUtils.substringBetween(id, "DBB", "\n");
         dob = dob.substring(0,2) + "/" + dob.substring(2,4) + "/" + dob.substring(4);
 
+        SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+        int yearDifference = 0;
+        try {
+            Date birthdate = df.parse(dob);
+            Calendar birth = Calendar.getInstance();
+            birth.setTime(birthdate);
+            Calendar today = Calendar.getInstance();
+
+            yearDifference = today.get(Calendar.YEAR)
+                    - birth.get(Calendar.YEAR);
+
+            if (today.get(Calendar.MONTH) < birth.get(Calendar.MONTH)) {
+                yearDifference--;
+            } else {
+                if (today.get(Calendar.MONTH) == birth.get(Calendar.MONTH)
+                        && today.get(Calendar.DAY_OF_MONTH) < birth
+                        .get(Calendar.DAY_OF_MONTH)) {
+                    yearDifference--;
+                }
+
+            }
+            totalAge+=yearDifference;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         String eyes = StringUtils.substringBetween(id, "DAY", "\n");
 
         String address = StringUtils.substringBetween(id, "DAG", "\n") + "\n" + StringUtils.substringBetween(id, "DAI", "\n") + ", "
                 + StringUtils.substringBetween(id, "DAJ", "\n") + " " + StringUtils.substringBetween(id, "DAK", "\n").subSequence(0,5) + "\n"; //+ StringUtils.substringBetween(id, "DCG", "\n");
 
 
-        String parsed = "Name: " + fName + " " + mName + " " +  lName + "\n" + "Date of birth: " + dob + "\n" + "Eye Color: " + eyes + "\n" + address;
+        String parsed = "Name: " + fName + " " + mName + " " +  lName + "\n" + "Date of birth: " + dob +" Age: " + yearDifference+ "\n" + "Eye Color: " + eyes + "\n" + address;
 
         if(fName == null || lName == null)
             return "Wrong or Invalid Barcode";
 
         System.out.println(fName);
+
+        scanCount++;
 
         return (parsed);
     }

@@ -135,7 +135,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     String parseString(String id){
-
+        if(id.charAt(0)!='@')
+            return("Wrong Barcode, or invalid ID.");
         String fName = StringUtils.substringBetween(id,"DAC", "\n");
         String mName = StringUtils.substringBetween(id, "DAD", "\n");
         String lName = StringUtils.substringBetween(id,"DCS", "\n");

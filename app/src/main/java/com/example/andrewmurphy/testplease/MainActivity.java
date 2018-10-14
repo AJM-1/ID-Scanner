@@ -118,7 +118,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         autoFocus.setVisibility(View.INVISIBLE);
 
         //Open to Camera
-        //openReader();
+        openReader();
     }
 
     /**
@@ -151,7 +151,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             male.setVisibility(View.VISIBLE);
             female.setVisibility(View.VISIBLE);
             male.setText("Male: "+sexPercent+"%");
-            female.setText("Female "+(100-sexPercent)+"%");
+            female.setText("Female: "+(100-sexPercent)+"%");
             sex.setVisibility(View.VISIBLE);
 
             //streetview buttons
@@ -165,7 +165,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             fake.setVisibility(View.VISIBLE);
             fakeId.setVisibility(View.VISIBLE);
             real.setText("Valid: "+fakeIdPercent+"%");
-            fake.setText("Invalid "+(100-fakeIdPercent)+"%");
+            fake.setText("Invalid: "+(100-fakeIdPercent)+"%");
 
             stats.setVisibility(View.INVISIBLE);
 
@@ -313,7 +313,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         scanCount++;
 
-        String parsed = "Name: " + fName + " " + mName + " " +  lName + "\n" + "Date of birth: " + dob +"      Sex: "+ sex+ " Age: " + yearDifference+ "\n" + "Eye Color: " + eyes + "\n" + address;
+        String parsed = "Name: " + fName + " " + mName + " " +  lName + "\n" + "Date of birth: " + dob +"\nSex: "+ sex+ "      Age: " + yearDifference+ "\n" + "Eye Color: " + eyes + "\n" + address;
 
         return (parsed);
     }

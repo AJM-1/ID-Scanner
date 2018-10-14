@@ -68,6 +68,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     String address;
     Button openStreetView, openImage, stats;
 
+    boolean notFake = false;
+
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
@@ -98,6 +100,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         openImage = findViewById(R.id.openImage);
         openImage.setVisibility(View.INVISIBLE);
         stats = findViewById(R.id.stats);
+
 
         /**Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194");
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
@@ -140,7 +143,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             fakeId.setVisibility(View.INVISIBLE);
 
             barcodeValue.setText("");
-
+            notFake = false;
             //open up dat reader
             openReader();
         }
@@ -221,8 +224,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     statusMessage.setText(R.string.barcode_success);
                     barcodeValue.setText(parseString(barcode.rawValue));
                     Log.d(TAG, "Barcode read: " + barcode.rawValue);
-                    openStreetView.setVisibility(View.VISIBLE);
-                    openImage.setVisibility(View.VISIBLE);
+                    if(notFake==true) {
+                        openStreetView.setVisibility(View.VISIBLE);
+                        openImage.setVisibility(View.VISIBLE);
+                    }
                     stats.setVisibility(View.VISIBLE);
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
@@ -250,7 +255,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     String parseString(String id){
         if(id.charAt(0)!='@') {
             fCount++;
-            return "Wrong or Invalid Barcode";
+            return "This ID is fake.";
         }
 
         String fName = StringUtils.substringBetween(id,"DAC", "\n");
@@ -270,7 +275,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         if(fName == null || lName == null) {
             fCount++;
-            return "Wrong or Invalid Barcode";
+            return "This ID is fake.";
         }
 
         //add age
@@ -314,6 +319,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         scanCount++;
 
         String parsed = "Name: " + fName + " " + mName + " " +  lName + "\n" + "Date of birth: " + dob +"\nSex: "+ sex+ "      Age: " + yearDifference+ "\n" + "Eye Color: " + eyes + "\n" + address;
+
+        notFake=true;
 
         return (parsed);
     }

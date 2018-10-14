@@ -82,7 +82,6 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
     private ScaleGestureDetector scaleGestureDetector;
     private GestureDetector gestureDetector;
 
-
     /**
      * Initializes the UI and creates the detector pipeline.
      */

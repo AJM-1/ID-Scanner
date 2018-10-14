@@ -230,7 +230,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
 
-        String parsed = "Name: " + fName + " " + mName + " " +  lName + "\n" + "Date of birth: " + dob +"      Sex: "+ sex+ " Age: " + yearDifference+ "\n" + "Eye Color: " + eyes + "\n" + address;
+        String parsed = "Name: " + fName + " " + mName + " " +  lName + "\n" + "Date of birth: " + dob +"\nSex: "+ sex+ "\nAge: " + yearDifference+ "\n" + "Eye Color: " + eyes + "\n" + address;
 
         if(fName == null || lName == null)
             return "Wrong or Invalid Barcode";

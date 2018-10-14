@@ -17,11 +17,14 @@
 package com.example.andrewmurphy.testplease;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -30,6 +33,9 @@ import com.google.android.gms.vision.barcode.Barcode;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,8 +53,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private CompoundButton autoFocus;
     private CompoundButton useFlash;
     private TextView statusMessage;
-    private TextView barcodeValue;
-    int scanCount = 0, totalAge = 0;
+    private TextView barcodeValue, male, female;
+    private ProgressBar sex;
+    int scanCount = 0, totalAge = 0, mCount = 0, sexPercent;
+    ImageView building;
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
@@ -60,6 +68,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         statusMessage = findViewById(R.id.status_message);
         barcodeValue = findViewById(R.id.barcode_value);
+        sex = findViewById(R.id.sex);
+        System.out.println(sex.getMax());
+        male = findViewById(R.id.male);
+        male.setVisibility(View.INVISIBLE);
+        female = findViewById(R.id.female);
+        female.setVisibility(View.INVISIBLE);
+
+        building = findViewById(R.id.building);
+
 
         autoFocus = findViewById(R.id.auto_focus);
         useFlash = findViewById(R.id.use_flash);
@@ -82,10 +99,20 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         if (v.getId() == R.id.read_barcode) {
             //open up dat reader
+            sex.setVisibility(View.INVISIBLE);
+            male.setVisibility(View.INVISIBLE);
+            female.setVisibility(View.INVISIBLE);
             openReader();
         }
         if (v.getId() == R.id.stats) {
-            barcodeValue.setText("Statistics \nAverage Age: "+ String.format("%.2f", ((double)totalAge/(double)scanCount)) + "\nTotal Scans: \t"+ scanCount);
+            sexPercent = (int)((double)mCount/((double)scanCount)*100);
+            sex.setProgress(sexPercent);
+            male.setVisibility(View.VISIBLE);
+            female.setVisibility(View.VISIBLE);
+            male.setText("Male: "+sexPercent+"%");
+            female.setText("Female "+(100-sexPercent)+"%");
+            sex.setVisibility(View.VISIBLE);
+            barcodeValue.setText(("Statistics \nAverage Age: "+ String.format("%.2f", ((double)totalAge/(double)scanCount)) + "\nTotal Scans: \t"+ scanCount));
         }
 
     }
@@ -183,11 +210,27 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         String eyes = StringUtils.substringBetween(id, "DAY", "\n");
 
+        String sex = StringUtils.substringBetween(id, "DBC", "\n");
+        if(sex.charAt(0)=='1') {
+            sex = "M";
+            mCount++;
+        }
+        else
+            sex="F";
+
         String address = StringUtils.substringBetween(id, "DAG", "\n") + "\n" + StringUtils.substringBetween(id, "DAI", "\n") + ", "
                 + StringUtils.substringBetween(id, "DAJ", "\n") + " " + StringUtils.substringBetween(id, "DAK", "\n").subSequence(0,5) + "\n"; //+ StringUtils.substringBetween(id, "DCG", "\n");
 
+        //sets imageview to building from google maps
+        String addURL = address.replaceAll(" ", "").replace("\n","");
+        String apiKey = "AIzaSyDN7GaSau_WD0nxq8YeLZC8Nj4Q5BcHVWU";
+        String signature = "dQcZEylDm5smZ52cig9-PqlMgs0=";
 
-        String parsed = "Name: " + fName + " " + mName + " " +  lName + "\n" + "Date of birth: " + dob +" Age: " + yearDifference+ "\n" + "Eye Color: " + eyes + "\n" + address;
+
+
+
+
+        String parsed = "Name: " + fName + " " + mName + " " +  lName + "\n" + "Date of birth: " + dob +"      Sex: "+ sex+ " Age: " + yearDifference+ "\n" + "Eye Color: " + eyes + "\n" + address;
 
         if(fName == null || lName == null)
             return "Wrong or Invalid Barcode";
@@ -197,6 +240,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
         scanCount++;
 
         return (parsed);
+    }
+
+    public static Drawable LoadImageFromWebOperations(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "src name");
+            return d;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

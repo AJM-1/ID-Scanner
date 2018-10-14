@@ -45,6 +45,7 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 //import com.example.andrewmurphy.testplease.ui.camera.CameraSource;
 //import com.google.android.gms.barcodereader.ui.camera.CameraSource;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
@@ -80,6 +81,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
     // helper objects for detecting taps and pinches.
     private ScaleGestureDetector scaleGestureDetector;
     private GestureDetector gestureDetector;
+
 
     /**
      * Initializes the UI and creates the detector pipeline.

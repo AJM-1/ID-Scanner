@@ -6,6 +6,8 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:fullBackupContent="false"
@@ -13,11 +15,14 @@
         android:icon="@drawable/icon"
         android:label="MultiTrackerApp"
         android:supportsRtl = "true"
-        android:theme="@style/Theme.AppCompat" >
+        android:theme="@style/Theme.AppCompat"
+        android:usesCleartextTraffic="true" >
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
+
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDeD0lJesOnllLjBVGM-KIEzW8vUVlHc-c"/>
 
         <activity
             android:name=".MainActivity"
@@ -29,8 +34,13 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".PanoramaViewDemo"
+            android:label="Google StreetView"></activity>
+
         <activity android:name=".BarcodeCaptureActivity"
             android:label="Read Barcode"/>
+
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>
 
 </manifest>

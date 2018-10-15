@@ -179,8 +179,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Streetview getLatLn = new Streetview();
             String latln = getLatLn.onCreate(address);
 
+            System.out.println(latln);
+
             Intent intent1 = new Intent(this, PanoramaViewDemo.class);
-            intent1.putExtra(latln, 0);
+            intent1.putExtra("latln", latln);
             this.startActivity(intent1);
         }
         if (v.getId() == R.id.openImage) {
@@ -253,76 +255,80 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     String parseString(String id){
-        if(id.charAt(0)!='@') {
-            fCount++;
-            return "This ID is fake.";
-        }
-
-        String fName = StringUtils.substringBetween(id,"DAC", "\n");
-        String mName = StringUtils.substringBetween(id, "DAD", "\n");
-        String lName = StringUtils.substringBetween(id,"DCS", "\n");
-
-        String dob = StringUtils.substringBetween(id, "DBB", "\n");
-        dob = dob.substring(0,2) + "/" + dob.substring(2,4) + "/" + dob.substring(4);
-
-        String eyes = StringUtils.substringBetween(id, "DAY", "\n");
-
-        String sex = StringUtils.substringBetween(id, "DBC", "\n");
-
-         address = StringUtils.substringBetween(id, "DAG", "\n") + "\n" + StringUtils.substringBetween(id, "DAI", "\n") + ", "
-                + StringUtils.substringBetween(id, "DAJ", "\n") + " " + StringUtils.substringBetween(id, "DAK", "\n").subSequence(0,5) + "\n"; //+ StringUtils.substringBetween(id, "DCG", "\n");
-
-
-        if(fName == null || lName == null) {
-            fCount++;
-            return "This ID is fake.";
-        }
-
-        //add age
-        SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy");
-        int yearDifference = 0;
         try {
-            Date birthdate = df.parse(dob);
-            Calendar birth = Calendar.getInstance();
-            birth.setTime(birthdate);
-            Calendar today = Calendar.getInstance();
-
-            yearDifference = today.get(Calendar.YEAR)
-                    - birth.get(Calendar.YEAR);
-
-            if (today.get(Calendar.MONTH) < birth.get(Calendar.MONTH)) {
-                yearDifference--;
-            } else {
-                if (today.get(Calendar.MONTH) == birth.get(Calendar.MONTH)
-                        && today.get(Calendar.DAY_OF_MONTH) < birth
-                        .get(Calendar.DAY_OF_MONTH)) {
-                    yearDifference--;
-                }
-
+            if (id.charAt(0) != '@') {
+                fCount++;
+                return "This ID is fake.";
             }
-            totalAge+=yearDifference;
-        } catch (ParseException e) {
-            e.printStackTrace();
+
+            String fName = StringUtils.substringBetween(id, "DAC", "\n");
+            String mName = StringUtils.substringBetween(id, "DAD", "\n");
+            String lName = StringUtils.substringBetween(id, "DCS", "\n");
+
+            String dob = StringUtils.substringBetween(id, "DBB", "\n");
+            dob = dob.substring(0, 2) + "/" + dob.substring(2, 4) + "/" + dob.substring(4);
+
+            String eyes = StringUtils.substringBetween(id, "DAY", "\n");
+
+            String sex = StringUtils.substringBetween(id, "DBC", "\n");
+
+            address = StringUtils.substringBetween(id, "DAG", "\n") + "\n" + StringUtils.substringBetween(id, "DAI", "\n") + ", "
+                    + StringUtils.substringBetween(id, "DAJ", "\n") + " " + StringUtils.substringBetween(id, "DAK", "\n").subSequence(0, 5) + "\n"; //+ StringUtils.substringBetween(id, "DCG", "\n");
+
+
+            if (fName == null || lName == null) {
+                fCount++;
+                return "This ID is fake.";
+            }
+
+            //add age
+            SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+            int yearDifference = 0;
+            try {
+                Date birthdate = df.parse(dob);
+                Calendar birth = Calendar.getInstance();
+                birth.setTime(birthdate);
+                Calendar today = Calendar.getInstance();
+
+                yearDifference = today.get(Calendar.YEAR)
+                        - birth.get(Calendar.YEAR);
+
+                if (today.get(Calendar.MONTH) < birth.get(Calendar.MONTH)) {
+                    yearDifference--;
+                } else {
+                    if (today.get(Calendar.MONTH) == birth.get(Calendar.MONTH)
+                            && today.get(Calendar.DAY_OF_MONTH) < birth
+                            .get(Calendar.DAY_OF_MONTH)) {
+                        yearDifference--;
+                    }
+
+                }
+                totalAge += yearDifference;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (sex.charAt(0) == '1') {
+                sex = "M";
+                mCount++;
+            } else
+                sex = "F";
+
+
+            System.out.println(fName);
+
+            scanCount++;
+
+            String parsed = "Name: " + fName + " " + mName + " " + lName + "\n" + "Date of birth: " + dob + "\nSex: " + sex + "      Age: " + yearDifference + "\n" + "Eye Color: " + eyes + "\n" + address;
+
+            notFake = true;
+
+            return (parsed);
         }
-        if(sex.charAt(0)=='1') {
-            sex = "M";
-            mCount++;
+        catch (Exception e){
+            return ("This ID is fake");
         }
-        else
-            sex="F";
 
 
-
-
-        System.out.println(fName);
-
-        scanCount++;
-
-        String parsed = "Name: " + fName + " " + mName + " " +  lName + "\n" + "Date of birth: " + dob +"\nSex: "+ sex+ "      Age: " + yearDifference+ "\n" + "Eye Color: " + eyes + "\n" + address;
-
-        notFake=true;
-
-        return (parsed);
     }
 
 }

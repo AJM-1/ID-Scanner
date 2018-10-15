@@ -22,8 +22,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class PanoramaViewDemo extends AppCompatActivity {
 
-    // George St, Sydney
-    private static LatLng SYDNEY = new LatLng( 42.3554329, -88.0592862);
+
+    private LatLng location = new LatLng( 42.3554329, -88.0592862);
 
     private StreetViewPanoramaView mStreetViewPanoramaView;
 
@@ -33,10 +33,12 @@ public class PanoramaViewDemo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //sets location
+        setCameraLatLng(savedInstanceState);
 
         StreetViewPanoramaOptions options = new StreetViewPanoramaOptions();
         if (savedInstanceState == null) {
-            options.position(SYDNEY);
+            options.position(location);
         }
 
         mStreetViewPanoramaView = new StreetViewPanoramaView(this, options);
@@ -53,11 +55,23 @@ public class PanoramaViewDemo extends AppCompatActivity {
         mStreetViewPanoramaView.onCreate(mStreetViewBundle);
     }
 
-    protected void setCameraLatLng(String latln, int x){
+    protected void setCameraLatLng(Bundle savedInstanceState){
+        String latln;
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                latln= null;
+            } else {
+                latln = extras.getString("STRING_I_NEED");
+            }
+        } else {
+            latln = (String) savedInstanceState.getSerializable("STRING_I_NEED");
+        }
+
         String lat = StringUtils.substringBetween(latln, "\"lat\": ", ",");
         String lng = StringUtils.substringBetween(latln, "\"lng\": ", "\n");
 
-        SYDNEY = new LatLng( Double.valueOf(lat), Double.valueOf(lng));
+        location = new LatLng( Double.valueOf(lat), Double.valueOf(lng));
     }
 
     @Override
